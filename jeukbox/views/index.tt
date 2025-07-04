@@ -57,6 +57,7 @@
 		</td>
 		<td>
 			<audio id="audio-player" controls></audio>
+			<img src="images/jeukbox.gif" width="50">
 		</td>
 	</tr>
 </table>
