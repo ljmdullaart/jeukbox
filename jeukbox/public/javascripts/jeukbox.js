@@ -3,6 +3,8 @@ window.selectedAlbum = null;
 window.selectedTitle = null;
 let allArtists = [];
 let allAlbums = [];
+let allTitles = [];
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -351,21 +353,60 @@ async function loadAlbums(artist = '') {
 }
 
 
-  async function loadTitles(artist = '', album = '') {
-    try {
-      const response = await fetch(`/api/titles?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`);
-      const data = await response.json();
-      titleSelect.innerHTML = '';
-      data.forEach(entry => {
-        const option = document.createElement('option');
-        option.value = entry.title;
-        option.textContent = entry.title;
-        titleSelect.appendChild(option);
-      });
-    } catch (err) {
-      // handle error silently
-    }
+  //async function loadTitles(artist = '', album = '') {
+    //try {
+      //const response = await fetch(`/api/titles?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`);
+      //const data = await response.json();
+      //titleSelect.innerHTML = '';
+      //data.forEach(entry => {
+        //const option = document.createElement('option');
+        //option.value = entry.title;
+        //option.textContent = entry.title;
+        //titleSelect.appendChild(option);
+      //});
+    //} catch (err) {
+      //// handle error silently
+    //}
+  //}
+
+async function loadTitles(artist = '', album = '') {
+  try {
+    const response = await fetch(`/api/titles?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`);
+    const data = await response.json();
+    allTitles = data.map(entry => entry.title || '');
+    renderTitleList('');
+  } catch (err) {
+    allTitles = [];
+    renderTitleList('');
   }
+}
+function renderTitleList(filter) {
+  const filtered = allTitles.filter(name =>
+    typeof name === 'string' && name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  titleSelect.innerHTML = '';
+  filtered.forEach(name => {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    titleSelect.appendChild(option);
+  });
+
+  // Optional: auto-select the first match
+  if (filtered.length > 0) {
+    titleSelect.selectedIndex = 0;
+  }
+}
+
+const titleFilter = document.getElementById('title-filter');
+
+titleFilter.addEventListener('input', () => {
+  const search = titleFilter.value.trim();
+  renderTitleList(search);
+});
+
+
 playlistList.addEventListener('change', async () => {
   const selected = playlistList.value;
   if (!selected) return;

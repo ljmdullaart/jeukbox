@@ -34,6 +34,8 @@
 			<div class="trans">
 				<strong>Selected Title:</strong> <span id="title-name">None</span>
 			</div>
+			<input type="text" id="title-filter" placeholder="Search titles..." style="width: 100%; margin-bottom: 0.5em;">
+
 			<select id="title-select" size="10" style="font-size:0.9em;"></select>
 			<button id="clear-title">Clear Title</button>
 		</td>
@@ -57,7 +59,7 @@
 		</td>
 		<td>
 			<audio id="audio-player" controls></audio>
-			<img src="images/jeukbox.gif" width="50">
+			<img src="images/jeukbox.gif" width="100">
 		</td>
 	</tr>
 </table>
