@@ -28,25 +28,28 @@ my $kidpid;			# PID of the player when it is playing
 my $playing=0;			# Flag to see is a song is playing at the moment
 my @play_queue;			# Queue fro songs to be played
 my @title_queue;		# same queue, but only the titles.
+my $message="Welcome";		
 # Tk objects
 my $mw;				# Main winndow
 my $menu_bar;			#   The menu bar at the top
 my $menu_file;			#     The "file" menu in the menu bar
-my $frame_message;		#   A message frame for infoemation
+my $frame_message;		#   A message frame for information
 my $frame_main;			#   The main frame where everything is located
-my $frame_artist;		#      The frame for the list of artists
-my $listbox_artist;		#        Listbox with the relevant artists
-my $frame_album;		#      The frame for the list of albums
-my $listbox_album;		#        Listbox with the relevant albums
-my $frame_title;		#      The frame for the list of song titles
-my $listbox_title;		#        Listbox with the relevant titles
-my $frame_playlist;		#      The frame for the list of playlists
-my $frame_actions;		#      The frame for the list of other actions
-my $frame_inactions;		#        A frame to group the actions. used for a seperate destroy
-my $frame_buttons;		#          Frame for action buttons
-my $listbox_playing;		#          List box for the play-queue
-my $frame_text;			#      Frame with songtext if available
-my $textbox;			#        Box with songtext
+my $frame_row1;			#     The top row of frames  
+my $frame_artist;		#        The frame for the list of artists
+my $listbox_artist;		#          Listbox with the relevant artists
+my $frame_album;		#        The frame for the list of albums
+my $listbox_album;		#          Listbox with the relevant albums
+my $frame_row2;			#     The second row of frames  
+my $frame_title;		#        The frame for the list of song titles
+my $listbox_title;		#          Listbox with the relevant titles
+my $frame_playlist;		#        The frame for the list of playlists
+my $frame_actions;		#        The frame for the list of other actions
+my $frame_inactions;		#          A frame to group the actions. used for a seperate destroy
+my $frame_buttons;		#            Frame for action buttons
+my $listbox_playing;		#            List box for the play-queue
+my $frame_text;			#        Frame with songtext if available
+my $textbox;			#          Box with songtext
 # Other variables
 my $selected_artist='__ALL_ARTISTS__';	# The artist, when selected
 my $filter_artist='';			# a filter for the artist
@@ -58,6 +61,8 @@ my $nowplaying_artist;
 my $nowplaying_album;
 my $nowplaying_song;
 my $nowplaying_file;
+
+my $mpg_cmd;
 
 #      _       _	_		    
 #   __| | __ _| |_ __ _| |__   __ _ ___  ___ 
@@ -266,7 +271,9 @@ sub play_song {
 	my $txt=$song;
 	$nowplaying_file=$song;
 	
+
 print "Now playing $nowplaying_file\n";
+	$message= "Now playing $nowplaying_file\n";
 	$txt=~s/mp3$/txt/;
 	if ( -f $txt ){ print "There is a songtext~\n"; }
 	make_textbox($song);
@@ -274,11 +281,12 @@ print "Now playing $nowplaying_file\n";
 		# fork returned undef, so failed
 		die "cannot fork: $!";
 	} elsif ($kidpid == 0) {
+
 		print "Playing $song\n";
 		#exec("/usr/local/bin/monoplay",$song);
 		open (STDOUT,'>>','/dev/null');
 		open (STDERR,'>>','/dev/null');
-		exec('bash', '-c',"mpg123 --mix $song");
+		exec('bash', '-c',"mpg123 --mono $song");
 		# if the exec fails, fall through to the next statement
 		die "can't exec date: $!";
 	}
@@ -290,6 +298,7 @@ sub queue_song {
 	push @play_queue,$song;
 	push @title_queue,$title;
 	print "Queue $title --- $song\n";
+	$message= "Queue $title --- $song\n";
 	if ($playing==0){ 
 		print "Playing=$playing, so start the next song\n";
 		my $nxt=shift @play_queue;
@@ -379,15 +388,42 @@ sub make_topframes {
 		) -> pack (
 			-side	=>'top'
 		);
+	$frame_message->Label (
+		-textvariable => \$message,
+		-width        => 200
+		) -> pack (
+			-side	=>'top'
+		);
 	$frame_main=$mw->Frame(
 		) -> pack (
 			-side	=>'bottom'
+		);
+	$frame_row1=$frame_main->Frame(
+		) -> pack (
+			-side	=>'top'
+		);
+	$frame_row1->Label(
+		-text	=>' ',
+		-height =>35
+		) -> pack (
+			-side	=>'left'
+		);
+	
+	$frame_row2=$frame_main->Frame(
+		) -> pack (
+			-side	=>'bottom'
+		);
+	$frame_row2->Label(
+		-text	=>' ',
+		-height =>35
+		) -> pack (
+			-side	=>'left'
 		);
 }
 # list frames
 
 sub make_listframes {
-	$frame_artist=$frame_main->Frame(
+	$frame_artist=$frame_row1->Frame(
 		) -> pack (
 			-side  => 'left'
 		);
@@ -416,7 +452,7 @@ sub make_listframes {
 		}
 	});
 	
-	$frame_album=$frame_main->Frame(
+	$frame_album=$frame_row1->Frame(
 		) -> pack (
 			-side => 'left'
 		);
@@ -444,7 +480,7 @@ sub make_listframes {
 		}
 	});
 	
-	$frame_title=$frame_main->Frame(
+	$frame_title=$frame_row2->Frame(
 		) -> pack (
 			-side => 'left'
 		);
@@ -471,15 +507,15 @@ sub make_listframes {
 			make_titlelb();
 		}
 	});
-	$frame_playlist=$frame_main->Frame(
+	$frame_playlist=$frame_row1->Frame(
 		) -> pack (
 			-side => 'left'
 		);
-	$frame_actions=$frame_main->Frame(
+	$frame_actions=$frame_row1->Frame(
 		) -> pack (
 			-side => 'left'
 		);
-	$frame_text=$frame_main->Frame(
+	$frame_text=$frame_row2->Frame(
 		) -> pack (
 			-side => 'left'
 		);
@@ -491,7 +527,7 @@ sub make_buttonframe {
 	$frame_inactions->Label (-textvariable=>$nowplaying_file ,  -width      => 30)->pack(-side=>'top');
 	$frame_inactions->Button (
 		-text	=> 'Stop current song',
-		-width	=> 30,
+		-width	=> 50,
 		-command => sub {
 			next_song();
 		} )-> pack(
@@ -499,7 +535,7 @@ sub make_buttonframe {
 		);
 	$frame_inactions->Button (
 		-text	=> 'Play album',
-		-width	=> 30,
+		-width	=> 50,
 		-command => sub {
 			queue_album();
 		} )-> pack(
@@ -507,7 +543,7 @@ sub make_buttonframe {
 		);
 	$frame_inactions->Button (
 		-text	=> 'Play 10 songs',
-		-width	=> 30,
+		-width	=> 50,
 		-command => sub {
 			queue_10();
 		} )-> pack(
@@ -515,7 +551,7 @@ sub make_buttonframe {
 		);
 	$frame_inactions->Button (
 		-text	=> 'Clear play queue',
-		-width	=> 30,
+		-width	=> 50,
 		-command => sub {
 			undef @play_queue;
 			undef @title_queue;
@@ -533,7 +569,7 @@ sub make_titlelb {
 		"Listbox",
 		-scrollbars => "e",
 		-selectmode => "single",
-		-height     => 30,
+		-height     => 25,
 		-width      => 70
 	)->pack(-side => 'bottom'  );
 	$listbox_title->insert('end','__ALL_TITLES__');
@@ -608,8 +644,8 @@ sub make_albumlb {
 		"Listbox",
 		-scrollbars => "e",
 		-selectmode => "single",
-		-height     => 30,
-		-width      => 50
+		-height     => 25,
+		-width      => 75
 	)->pack(-side => 'bottom'  );
 	$listbox_album->insert('end','__ALL_ALBUMS__');
 	$listbox_album->insert('end','__NO_ALBUM__');
@@ -646,6 +682,7 @@ sub make_albumlb {
 		}
 		make_titlelb;
 		print "$selected_album\n";
+		$message= "$selected_album\n";
 	} ) ;
 }
 
@@ -656,8 +693,8 @@ sub make_artistlb {
 		"Listbox",
 		-scrollbars => "e",
 		-selectmode => "single",
-		-height     => 30,
-		-width      => 30
+		-height     => 25,
+		-width      => 50
 	)->pack(-side => 'bottom'  );
 	$listbox_artist->insert('end','__ALL_ARTISTS__');
 	$listbox_artist->insert('end','__NO_ARTIST__');
@@ -678,6 +715,7 @@ sub make_artistlb {
 		make_albumlb;
 		make_titlelb;
 		print "$selected_artist\n";
+		$message= "$selected_artist\n";
 	} ) ;
 }
 
@@ -716,7 +754,7 @@ sub make_textbox {
 $SIG{INT}  = sub { print "Caught a sigINT $!\n" ;system("stty sane");if ($kidpid+1>2){kill 9,$kidpid;}; waitpid($kidpid, 0); $playing=0; exit; };
 $SIG{TERM} = sub { print "Caught a sigTERM $!\n";system("stty sane");if ($kidpid+1>2){kill 9,$kidpid;}; waitpid($kidpid, 0); $playing=0; exit; };
 
-$mw->Label ( -text=>' ', -height=>50)->pack(-side =>'left');
+$mw->Label ( -text=>' ', -height=>30)->pack(-side =>'left');
 
 make_menubar();
 make_topframes();
