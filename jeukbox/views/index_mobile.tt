@@ -1,0 +1,61 @@
+
+<div id="page">
+	<h1>Mobile Jeukbox</h1>
+
+<div id="selector-box">
+  <div>
+    <div>
+    
+      <strong>Selected Artist:</strong> <span id="artist-name">None</span>
+      <br>
+      <button id="clear-artist">Clear Artist</button>
+      <input type="text" id="artist-filter" placeholder="Search artists..." style="width: 100%; margin-bottom: 0.5em;">
+
+    </div>
+    <select id="artist-select" size="10"></select>
+
+    <div>
+      <strong>Selected Album:</strong> <span id="album-name">None</span>
+      <br>
+      <button id="clear-album">Clear Album</button>
+      <button id="play-album">Play Album</button>
+      <input type="text" id="album-filter" placeholder="Search albums..." style="width: 100%; margin-bottom: 0.5em;">
+    </div>
+    <select id="album-select" size="10"></select>
+
+    <div>
+      <strong>Selected Title:</strong> <span id="title-name">None</span>
+      <br>
+      <button id="clear-title">Clear Title</button>
+    </div>
+    <select id="title-select" size="10"></select>
+    <div>
+      <strong>Playlist:</strong>
+      <button id="clear-playlist">Clear List</button>
+      <button id="next-track">Next</button>
+
+
+    </div>
+      <select id="playlist-select" size="10"></select>
+
+      <button id="save-playlist">Save Playlist</button>
+
+    <div>
+      <audio id="audio-player" controls></audio>
+    </div>
+    <div>
+      <label for="playlist-list">Offline Playlists:</label>
+      <select id="playlist-list" size="5"></select>
+    </div>
+  </div>
+</div>
+
+
+<!--
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadArtists();
+});
+
+</script>
+-->
