@@ -244,6 +244,7 @@ if ((!artist || artist === 'Unknown Artist') && album) {
 
   function playNextInPlaylist() {
     if (playlistSelect.options.length === 0) return;
+    if (!audioPlayer.paused && !audioPlayer.ended) return;
 
     const entryText = playlistSelect.options[0].value;
     const { artist, album, title } = parseEntry(entryText);
@@ -392,11 +393,12 @@ function renderTitleList(filter) {
     option.textContent = name;
     titleSelect.appendChild(option);
   });
+    titleSelect.selectedIndex = -1;
 
   // Optional: auto-select the first match
-  if (filtered.length > 0) {
-    titleSelect.selectedIndex = 0;
-  }
+//  if (filtered.length > 0) {
+    //titleSelect.selectedIndex = 0;
+  //}
 }
 
 const titleFilter = document.getElementById('title-filter');
