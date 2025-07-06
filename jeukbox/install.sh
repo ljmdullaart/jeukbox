@@ -3,7 +3,8 @@
 ssh root@webservers mkdir -p /opt/jeukbox
 ssh root@webservers mountcommand synology
 
-if [ ! -l /links/cdtracks ] ; then  cat <<EOF
+if [ ! -L /links/cdtracks ] ; then
+cat <<EOF
 ******************************************************
 *  ERROR : op webservers ontbreekt /links/cdtracks   *
 ******************************************************
@@ -25,5 +26,4 @@ ssh root@webservers cpan Plack
 ssh root@webservers cpan JSON
 ssh root@webservers cpan File::Slurp
 ssh root@webservers cpan DBD::SQLite
-ssh webservers /opt/jeukbox/start.sh
 
