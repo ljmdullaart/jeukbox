@@ -1,62 +1,75 @@
-
-<div id="page">
-<img src="images/jeukbox.gif" width=200>
-
-<div id="selector-box">
-  <div>
-    <div>
-    
-      <strong>Selected Artist:</strong> <span id="artist-name">None</span>
-      <br>
-      <button id="clear-artist">Clear Artist</button>
-      <input type="text" id="artist-filter" placeholder="Search artists..." style="width: 100%; margin-bottom: 0.5em;">
-
-    </div>
-    <select id="artist-select" size="2"></select>
-
-    <div>
-      <strong>Selected Album:</strong> <span id="album-name">None</span>
-      <br>
-      <button id="clear-album">Clear Album</button>
-      <button id="play-album">Play Album</button>
-      <input type="text" id="album-filter" placeholder="Search albums..." style="width: 100%; margin-bottom: 0.5em;">
-    </div>
-    <select id="album-select" size="2"></select>
-
-    <div>
-      <strong>Selected Title:</strong> <span id="title-name">None</span>
-      <br>
-      <button id="clear-title">Clear Title</button>
-    </div>
-	 <input type="text" id="title-filter" placeholder="Search titles..." style="width: 100%; margin-bottom: 0.5em;">
-    <select id="title-select" size="2"></select>
-    <div>
-      <strong>Playlist:</strong>
-      <button id="clear-playlist">Clear List</button>
-      <button id="next-track">Next</button>
-
-
-    </div>
-      <select id="playlist-select" size="2"></select>
-
-      <button id="save-playlist">Save Playlist</button>
-
-    <div>
-      <audio id="audio-player" controls></audio>
-    </div>
-    <div>
-      <label for="playlist-list">Offline Playlists:</label>
-      <select id="playlist-list" size="5"></select>
-    </div>
-  </div>
-</div>
-
-
-<!--
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  loadArtists();
-});
-
-</script>
--->
+<img id="jukebox-visual" src="images/jeukboxstatic.jpg" style="width: 350px; max-width: 350px;" alt="Jukebox Visual">
+<table width=350px>
+	<tr>
+		<td width=150px>
+			<b>Selected Artist:</b>
+			<br>
+			<span id="artist-name">None</span>
+			<br>
+			<button id="clear-artist" style="width: 100px;">Clear Artist</button>
+			<br>
+			<input type="text" id="artist-filter" placeholder="Search artists..." style="width: 100px; margin-bottom: 0.5em;">
+		</td>
+		<td>
+			<select id="artist-select" size="10" style="height:100px;width: 100px;" background-image: url('/images/tapselect.png'); ></select>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>Selected Album:</strong>
+			<br>
+			<span id="album-name">None</span>
+			<br>
+			<button id="clear-album" style="width: 100px;">Clear Album</button>
+			<br>
+			<input type="text" id="album-filter" placeholder="Search albums..." style="width: 100px; margin-bottom: 0.5em;">
+			<br>
+			<button id="play-album" style="width: 100px;">Play Album</button>
+		</td>
+		<td>
+			<select id="album-select" size="10" style="height:100px;width: 100px;" background-image: url('/images/tapselect.png'); ></select>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>Selected Title:</strong> <span id="title-name">None</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<button id="clear-title" style="width: 100px;">Clear Title</button>
+			<br>
+	 		<input type="text" id="title-filter" placeholder="Search titles..." style="width: 100px; margin-bottom: 0.5em;">
+		</td>
+		<td>
+			<select id="title-select" size="10" style="height:100px;width: 100px;" background-image: url('/images/tapselect.png');></select>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong><label for="playlist-list">Select Playlists:</label></strong>
+		</td>
+		<td>
+			<select id="playlist-list" size="5" style="height:100px;width: 100px;" background-image: url('/images/tapselect.png');></select>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>Current playlist:</strong>
+			<br>
+			<button id="clear-playlist" style="width: 100px;">Clear List</button>
+			<br>
+			<button id="next-track" style="width: 100px;">Next</button>
+			<br>
+			<button id="save-playlist" style="width: 100px;">Save Playlist</button>
+		</td>
+		<td>
+			<select id="playlist-select" size="10" style="height:100px;width: 100px;" background-image: url('/images/tapselect.png');></select>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2>
+			<audio id="audio-player" controls></audio>
+		</td>
+	</tr>
+</table>
