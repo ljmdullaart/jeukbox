@@ -1,76 +1,75 @@
-
 <div style="background-image: url(/images/jeukbox.jpg); background-size: contain; background-repeat: no-repeat;background-size: 100% 100%;font-size:1.5em;">
-
-.br
 	<h1 style="text-align: centre;color:yellow;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jeukbox</h1>
-<div class="trans">
+	<table style="width: 90%; table-layout: fixed;margin-left: auto; margin-right: auto;border-spacing: 10px 0;">
+		<tr>
+			<td style="width:50% style="width: 100%; table-layout: fixed;font-size:1.5em;vertical-align: top;">
+				<div class="trans">
+					<strong>Selected Artist:</strong>
+					<span id="artist-name">None</span>
+				</div>
+				<button id="clear-artist">Clear Artist</button>
+				<input type="text" id="artist-filter" placeholder="Search artists..." style="width: 99%; margin-bottom: 0.5em;">
+				<br>
+				<select id="artist-select" size="10" style="font-size:0.9em;"></select>
+			</td>
+			<td style="width:50% style="width: 100%; table-layout: fixed;">
+				<br>
+				<div class="trans">
+					<strong>Selected Album:</strong>
+					<span id="album-name">None</span>
+				</div>
+				<button id="clear-album">Clear Album</button>
+				<button id="play-album">Play Album</button>
+				<input type="text" id="album-filter" placeholder="Search albums..." style="width: 99%; margin-bottom: 0.5em;">
+				<br>
+				<select id="album-select" size="10" style="font-size:0.9em;"></select>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align: top;">
+				<div class="trans">
+					<strong>Selected Title:</strong> <span id="title-name">None</span>
+				</div>
+				<input type="text" id="title-filter" placeholder="Search titles..." style="width: 99%; margin-bottom: 0.5em;">
+			</td>
+			<td style="vertical-align: top;">
+				<div class="trans">
+					<label for="playlist-list">Offline Playlists:</label>
+				</div>
+				<br>
+			</td>
+		</tr>
+		<tr>
+			<td>
+	
+				<select id="title-select" size="10" style="font-size:0.9em;"></select>
+				<button id="clear-title">Clear Title</button>
+			</td>
+			<td>
+				<select id="playlist-list" size="5" style="font-size:0.9em;"></select>
+      				<button id="no-id"> </button>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="trans">
+					<strong>Playlist:</strong>
+				</div>
+      				<button id="clear-playlist">Clear List</button>
+				<button id="next-track">Next</button>
+				<br>
+				<select id="playlist-select" size="10" style="font-size:0.9em;"></select>
+				<button id="save-playlist">Save Playlist</button>
+			</td>
+			<td style="text-align: center;">
+				<br>
+				<audio id="audio-player" controls width="300"></audio>
+				<br>
+				<img id="jukebox-visual" src="images/jeukboxstatic.jpg" style="width: 300px; max-width: 300px;" alt="Jukebox Visual">
+
+			</td>
+		</tr>
+	</table>
+	
 </div>
-<table style="width: 90%; table-layout: fixed;margin-left: auto; margin-right: auto;">
-	<tr>
-		<td style="width:50% style="width: 100%; table-layout: fixed;font-size:1.5em;">
-			<div class="trans">
-				<strong>Selected Artist:</strong>
-				<span id="artist-name">None</span>
-			</div>
-			<button id="clear-artist">Clear Artist</button>
-			<input type="text" id="artist-filter" placeholder="Search artists..." style="width: 100%; margin-bottom: 0.5em;">
-			<br>
-			<select id="artist-select" size="10" style="font-size:0.9em;"></select>
-		</td>
-		<td style="width:50% style="width: 100%; table-layout: fixed;">
-			<div class="trans">
-				<strong>Selected Album:</strong>
-				<span id="album-name">None</span>
-			</div>
-			<button id="clear-album">Clear Album</button>
-			<button id="play-album">Play Album</button>
-			<input type="text" id="album-filter" placeholder="Search albums..." style="width: 100%; margin-bottom: 0.5em;">
-			<br>
-			<select id="album-select" size="10" style="font-size:0.9em;"></select>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<div class="trans">
-				<strong>Selected Title:</strong> <span id="title-name">None</span>
-			</div>
-			<input type="text" id="title-filter" placeholder="Search titles..." style="width: 100%; margin-bottom: 0.5em;">
-
-			<select id="title-select" size="10" style="font-size:0.9em;"></select>
-			<button id="clear-title">Clear Title</button>
-		</td>
-		<td>
-			<div class="trans">
-				<label for="playlist-list">Offline Playlists:</label>
-			</div>
-			<select id="playlist-list" size="5" style="font-size:0.9em;"></select>
-      			<button id="no-id"> </button>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<strong>Playlist:</strong>
-			<br>
-      			<button id="clear-playlist">Clear List</button>
-			<button id="next-track">Next</button>
-			<br>
-			<select id="playlist-select" size="10" style="font-size:0.9em;"></select>
-			<button id="save-playlist">Save Playlist</button>
-		</td>
-		<td>
-			<audio id="audio-player" controls></audio>
-			<img src="images/jeukbox.gif" width="100">
-		</td>
-	</tr>
-</table>
-
-</div>
-
-<!--
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-		loadArtists();
-});
-
-</script>
--->
+	
