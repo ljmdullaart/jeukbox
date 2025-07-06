@@ -112,9 +112,18 @@ sub get_titles {
 	$fmt='hash' unless defined $fmt;
 	my $whereclause='WHERE 1=1 ';
 	my @xtraarg= ();
-	if ((defined $artist)&&($artist ne '')&&($artist ne 'null')) { $whereclause="$whereclause AND artist = ? "; push @xtraarg,$artist;}
-	if ((defined $album )&&($album  ne '')) { $whereclause="$whereclause AND album  = ? "; push @xtraarg,$album; }
-	$result=query_db('json',"SELECT DISTINCT title FROM mp3 $whereclause ORDER BY album,track",@xtraarg);
+	my $orderby='ORDER BY title';
+	if ((defined $artist)&&($artist ne '')&&($artist ne 'null')) {
+		$whereclause="$whereclause AND artist = ? ";
+		$orderby='ORDER BY album,track';
+		push @xtraarg,$artist;
+	}
+	if ((defined $album )&&($album  ne '')) {
+		$whereclause="$whereclause AND album  = ? ";
+		$orderby='ORDER BY album,track';
+		push @xtraarg,$album;
+	}
+	$result=query_db('json',"SELECT DISTINCT title FROM mp3 $whereclause $orderby",@xtraarg);
 	return $result;
 }
 sub get_file {
