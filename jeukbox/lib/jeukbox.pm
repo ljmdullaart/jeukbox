@@ -118,7 +118,7 @@ get '/play' => sub {
 
 
 get '/api/playlists' => sub {
-    my @search_dirs = ('.', '..', '../..', '/links');
+    my @search_dirs = ('.', '..', '../..', '/links/playlists');
     my @playlists;
 
     for my $dir (@search_dirs) {
