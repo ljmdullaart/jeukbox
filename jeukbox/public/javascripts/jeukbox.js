@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextTrackButton = document.getElementById('next-track');
   const artistFilter = document.getElementById('artist-filter');
   const albumFilter = document.getElementById('album-filter');
+  const jukeboxVisual = document.getElementById('jukebox-visual');
+
 
 document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
@@ -464,6 +466,21 @@ nextTrackButton.addEventListener('click', () => {
     playlistSelect.remove(0);
     playNextInPlaylist();
   }
+});
+
+audioPlayer.addEventListener('play', () => {
+  jukeboxVisual.src = 'images/jeukbox.gif';
+});
+
+audioPlayer.addEventListener('pause', () => {
+  jukeboxVisual.src = 'images/jeukboxstatic.jpg';
+});
+
+audioPlayer.addEventListener('ended', () => {
+  jukeboxVisual.src = 'images/jeukboxstatic.jpg';
+});
+audioPlayer.addEventListener('error', () => {
+  jukeboxVisual.src = 'images/jeukboxstatic.jpg';
 });
 
 
