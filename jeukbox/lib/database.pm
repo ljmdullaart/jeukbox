@@ -15,6 +15,7 @@ our @EXPORT_OK = qw(
 	get_album
 	get_titles
 	get_file
+	get_txt
 	get_artists_from_song
 	get_artists_from_album
 );
@@ -126,6 +127,26 @@ sub get_titles {
 	$result=query_db('json',"SELECT DISTINCT title FROM mp3 $whereclause $orderby",@xtraarg);
 	return $result;
 }
+sub get_txt {
+	(my $artist,my $album,my $title)=@_;
+	$artist='' unless defined $artist;
+	$album ='' unless defined $album ;
+	$title ='' unless defined $title ;
+	$artist='' if ( $artist eq 'null');
+	$album ='' if ( $album  eq 'null');
+	$title ='' if ( $title  eq 'null');
+	$artist='' if ( $artist =~/^Unknown/);
+	$album ='' if ( $album  =~/^Unknown/);
+	$title ='' if ( $title  =~/^Unknown/);
+	my @xtraarg= ();
+	my $whereclause='WHERE 1=1 '; 
+	if ((defined $artist)&&($artist ne '')) { $whereclause="$whereclause AND artist = ? "; push @xtraarg,$artist;}
+	if ((defined $album)&&($album ne '')) { $whereclause="$whereclause AND album = ? "; push @xtraarg,$album;}
+	if ((defined $title )&&($title  ne '')) { $whereclause="$whereclause AND title  = ? "; push @xtraarg,$title; }
+	my $txtfile=query_db('value',"SELECT file FROM mp3 $whereclause  LIMIT 1", @xtraarg);
+	$txtfile=~s/mp3$/txt/;
+	return $txtfile;
+}
 sub get_file {
 	(my $artist,my $album,my $title)=@_;
 	$artist='' unless defined $artist;
@@ -142,8 +163,6 @@ sub get_file {
 	if ((defined $artist)&&($artist ne '')) { $whereclause="$whereclause AND artist = ? "; push @xtraarg,$artist;}
 	if ((defined $album)&&($album ne '')) { $whereclause="$whereclause AND album = ? "; push @xtraarg,$album;}
 	if ((defined $title )&&($title  ne '')) { $whereclause="$whereclause AND title  = ? "; push @xtraarg,$title; }
-
-	
 	return query_db('value',"SELECT file FROM mp3 $whereclause  LIMIT 1", @xtraarg);
 }
 

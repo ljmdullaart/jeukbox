@@ -196,6 +196,10 @@ if ((!artist || artist === 'Unknown Artist') && album) {
     playlistSelect.innerHTML = '';
     audioPlayer.pause();
     audioPlayer.src = '';
+    const lyricsBox = document.getElementById('lyrics-box');
+    if (lyricsBox) {
+      lyricsBox.textContent = '';
+    }
   });
 
   playAlbumButton.addEventListener('click', async () => {
@@ -257,6 +261,8 @@ if ((!artist || artist === 'Unknown Artist') && album) {
       playlistSelect.remove(0);
       playNextInPlaylist();
     });
+    loadLyrics(title, artist, album);
+
   }
 
   async function loadOfflinePlaylists() {
@@ -478,10 +484,28 @@ audioPlayer.addEventListener('pause', () => {
 
 audioPlayer.addEventListener('ended', () => {
   jukeboxVisual.src = 'images/jeukboxstatic.jpg';
+  const lyricsBox = document.getElementById('lyrics-box');
+  if (lyricsBox) {
+    lyricsBox.textContent = '';
+  }
 });
 audioPlayer.addEventListener('error', () => {
   jukeboxVisual.src = 'images/jeukboxstatic.jpg';
 });
+
+async function loadLyrics(title, artist, album) {
+  const lyricsBox = document.getElementById('lyrics-box');
+  lyricsBox.textContent = 'Loading lyrics...';
+
+  try {
+    const response = await fetch(`/txt?title=${encodeURIComponent(title)}&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`);
+    if (!response.ok) throw new Error('Lyrics not found');
+    const text = await response.text();
+    lyricsBox.textContent = text || 'No lyrics available for this track.';
+  } catch (err) {
+    lyricsBox.textContent = 'Lyrics not available.';
+  }
+}
 
 
 });

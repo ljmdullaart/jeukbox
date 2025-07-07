@@ -10,6 +10,7 @@ use database qw(get_albums);
 use database qw(get_album);
 use database qw(get_titles);
 use database qw(get_file);
+use database qw(get_txt);
 use database qw(get_artists_from_song);
 use database qw(get_artists_from_album);
 
@@ -115,10 +116,36 @@ get '/play' => sub {
         ],
     );
 };
+get '/txt' => sub {
+    my $artist = query_parameters->get('artist') // '';
+    my $album  = query_parameters->get('album')  // '';
+    my $title  = query_parameters->get('title')  // '';
+
+    my $filename = get_txt($artist, $album, $title);
+    warn "Getting $filename...";
+    unless ($filename && -e $filename) {
+        status 'not_found';
+        return "No Lyrics";
+    }
+
+    my $size = -s $filename;
+	print STDERR "Attempting to send file: $filename\n";
+
+    send_file(
+        $filename,
+        content_type => 'text/plain',
+	system_path => 1,
+        content_disposition => 'inline',
+        headers => [
+            'Content-Length' => $size,
+            'Last-Modified'  => time2str((stat($filename))[9]),
+        ],
+    );
+};
 
 
 get '/api/playlists' => sub {
-    my @search_dirs = ('.', '..', '../..', '/links/playlists');
+    my @search_dirs = ('.', '..', '../..', '/links');
     my @playlists;
 
     for my $dir (@search_dirs) {
