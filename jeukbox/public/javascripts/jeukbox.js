@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const playAlbumButton = document.getElementById('play-album');
   const savePlaylistButton = document.getElementById('save-playlist');
   const nextTrackButton = document.getElementById('next-track');
+  const shuffleButton = document.getElementById('shuffle-playlist');
   const artistFilter = document.getElementById('artist-filter');
   const albumFilter = document.getElementById('album-filter');
   const jukeboxVisual = document.getElementById('jukebox-visual');
@@ -506,6 +507,27 @@ async function loadLyrics(title, artist, album) {
     lyricsBox.textContent = 'Lyrics not available.';
   }
 }
+
+
+shuffleButton.addEventListener('click', () => {
+  const children = Array.from(playlistSelect.children);
+
+  if (children.length <= 1) return; // nothing to shuffle
+
+  const nowPlaying = children[0]; // song currently playing
+  const rest = children.slice(1); // songs waiting in queue
+
+  // Fisher-Yates shuffle
+  for (let i = rest.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [rest[i], rest[j]] = [rest[j], rest[i]];
+  }
+
+  // Clear and rebuild playlist
+  playlistSelect.innerHTML = '';
+  playlistSelect.appendChild(nowPlaying); // keep current first
+  rest.forEach(el => playlistSelect.appendChild(el));
+});
 
 
 });
