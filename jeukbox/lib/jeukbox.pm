@@ -1,5 +1,6 @@
 package jeukbox;
 use Dancer2;
+use Dancer2::Plugin::OpenAPI;
 
 use HTTP::Date 'time2str';
 use File::Spec;
@@ -20,9 +21,11 @@ our $VERSION = '0.1';
 get '/' => sub {
 	my $ua = request->header('User-Agent') // '';	
 	if ($ua =~ /Mobile|Android|iPhone|iPad/i) {
+		content_type 'text/html'; 
 		template 'index_mobile' => { 'title' => 'jeukbox' };
 	}
 	else {
+		content_type 'text/html'; 
 		template 'index' => { 'title' => 'jeukbox' };
 	}
 };
@@ -96,10 +99,12 @@ get '/play' => sub {
     my $title  = query_parameters->get('title')  // '';
 
     my $filename = get_file($artist, $album, $title);
-
     unless ($filename && -e $filename) {
         status 'not_found';
-        return "Audio file not found.";
+        warn "Audio file $filename  not found." if defined $filename;
+        warn "Audio file undefined" unless defined $filename;
+        return { error => "Audio file not found."};
+     
     }
 
     my $size = -s $filename;
@@ -125,7 +130,7 @@ get '/txt' => sub {
     warn "Getting $filename...";
     unless ($filename && -e $filename) {
         status 'not_found';
-        return "No Lyrics";
+        return { error =>"No Lyrics"};
     }
 
     my $size = -s $filename;
