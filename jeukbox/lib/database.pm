@@ -163,7 +163,12 @@ sub get_file {
 	if ((defined $artist)&&($artist ne '')) { $whereclause="$whereclause AND artist = ? "; push @xtraarg,$artist;}
 	if ((defined $album)&&($album ne '')) { $whereclause="$whereclause AND album = ? "; push @xtraarg,$album;}
 	if ((defined $title )&&($title  ne '')) { $whereclause="$whereclause AND title  = ? "; push @xtraarg,$title; }
-	return query_db('value',"SELECT file FROM mp3 $whereclause  LIMIT 1", @xtraarg);
+	my $retval= query_db('value',"SELECT file FROM mp3 $whereclause  LIMIT 1", @xtraarg);
+	if (! defined $retval){
+		warn "EMPTY RETVAL $whereclause";
+		for (@xtraarg) { warn " $_"; }
+	}
+	return $retval;
 }
 
 sub get_album {
