@@ -7,19 +7,111 @@ use DBI;
 use utf8;
 use Text::Unidecode;
 use open ':std', ':encoding(UTF-8)';
+use Encode qw(decode encode find_encoding);
+use Encode::Detect;
+use Encode::Guess qw(euc-jp shiftjis iso-2022-jp); # Optional: for more aggressive guessing, but be careful
+my $FIXED_OUTPUT_ENCODING = 'UTF-8';
 
-sub map2a {
+sub old_map2a {
     	my ($text) = @_;
-	$text=unidecode($text);
-$text =~ tr/
-        \xC0\xC1\xC2\xC3\xC4\xC5\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF
-        \xE0\xE1\xE2\xE3\xE4\xE5\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF
-    /
-        AAAAAACEEEEIIIIIDNOOOOUUUUYTHss
-        aaaaaaceeeeiiiiioooooouuuuythyy
-    /;
+	$text =~ s/^  *//;
+	$text =~ s/  *$//;
+	$text =~ s/\\x83/f/g;
+	$text =~ s/\\x88//g;
+	$text =~ s/\\x91/'/g;
+	$text =~ s/\\x92/'/g;
+	$text =~ s/\\xA0/ /g;
+	$text =~ s/\\xA1/!/g;
+	$text =~ s/\\xA9/c/g;
+	$text =~ s/\\xAB/<</g;
+	$text =~ s/\\xB3/3/g;
+	$text =~ s/\\xB4/'/g;
+	$text =~ s/\\xB9/1/g;
+	$text =~ s/\\xBA/0/g;
+	$text =~ s/\\xBF/?/g;
+	$text =~ s/\\xC0/A/g;
+	$text =~ s/\\xC2/A/g;
+	$text =~ s/\\xC3/A/g;
+	$text =~ s/\\xC6/AE/g;
+	$text =~ s/\\xC7/C/g;
+	$text =~ s/\\xD1/N/g;
+	$text =~ s/\\xD4/O/g;
+	$text =~ s/\\xD6/O/g;
+	$text =~ s/\\xD8/0/g;
+	$text =~ s/\\xDF/ss/g;
+	$text =~ s/\\xE0/a/g;
+	$text =~ s/\\xE1/a/g;
+	$text =~ s/\\xE2/a/g;
+	$text =~ s/\\xE4/a/g;
+	$text =~ s/\\xE5/a/g;
+	$text =~ s/\\xE6/ea/g;
+	$text =~ s/\\xE7/c/g;
+	$text =~ s/\\xE8/e/g;
+	$text =~ s/\\xE9/e/g;
+	$text =~ s/\\xEA/e/g;
+	$text =~ s/\\xEB/e/g;
+	$text =~ s/\\xED/i/g;
+	$text =~ s/\\xEE/i/g;
+	$text =~ s/\\xEF/i/g;
+	$text =~ s/\\xF1/n/g;
+	$text =~ s/\\xF3/o/g;
+	$text =~ s/\\xF6/o/g;
+	$text =~ s/\\xF7/:/g;
+	$text =~ s/\\xF9/u/g;
+	$text =~ s/\\xFC/u/g;
+	$text =~ s/\x\FE/b/g;
     	return unidecode($text);
 }
+
+sub map2a {
+ my ($input_string_bytes) = @_;
+
+	$input_string_bytes =~ s/^  *//;
+	$input_string_bytes =~ s/  *$//;
+    my $decoded_string;
+
+    # 1. Attempt to decode as UTF-8 first.
+    # This is crucial because a truly UTF-8 string MUST be decoded as UTF-8.
+    # We suppress the 'UTF-8 does not map to Unicode' warnings, as they are expected
+    # when testing non-UTF-8 strings.
+    {
+        no warnings 'utf8'; # Temporarily suppress warnings for invalid UTF-8 sequences
+        $decoded_string = eval { decode('UTF-8', $input_string_bytes, Encode::FB_CROAK) };
+    }
+
+    if (defined $decoded_string) {
+        # Successfully decoded as UTF-8, so encode to the fixed output
+        return encode($FIXED_OUTPUT_ENCODING, $decoded_string);
+    }
+
+    # 2. If not valid UTF-8, assume it's one of the common extended ASCII encodings.
+    # Iterate through them. cp1252 is often a good first guess for Windows environments.
+    # iso-8859-1 (Latin-1) is a common standard.
+    my @fallback_encodings = (
+        'cp1252',       # Windows Latin-1 (common on Windows systems)
+        'iso-8859-1',   # Latin-1 (common Unix/Linux/Web default)
+        'iso-8859-15',  # Latin-9 (adds Euro symbol and some French/Finnish chars)
+        'cp850',        # DOS Latin 1 / Western European
+        'macroman',     # Old Macintosh encoding
+        # Add more if you suspect other regions/systems:
+        # 'iso-8859-2', # Central European
+        # 'koi8-r',     # Cyrillic
+    );
+    foreach my $encoding (@fallback_encodings){
+        eval {
+            $decoded_string = decode($encoding, $input_string_bytes, Encode::FB_CROAK);
+            # If decode didn't die, it's successfully decoded.
+            return encode($FIXED_OUTPUT_ENCODING, $decoded_string);
+        };
+    }
+
+    # 3. Fallback: If no common encoding worked, something is truly ambiguous or non-text.
+    # This step ensures a string is *always* returned in the target encoding,
+    # even if characters are replaced.
+	return $input_string_bytes;
+}
+
+
 
 # Database
 my $dbfile = "music.db";
@@ -94,10 +186,10 @@ sub extract_id3_info {
     my @id3 = `id3info '$file_path'`;
     for (@id3) {
         chomp;
-        if (/=== TIT2/) { s/===.*: //; $title = map2a($_); }
-        elsif (/=== TRCK/) { s/===.*: //; $track = map2a($_); }
-        elsif (/=== TALB/) { s/===.*: //; $album = map2a($_); }
-        elsif (/=== TPE1/) { s/===.*: //; $performer = map2a($_); }
+        if (/=== TIT2/) { s/===.*: //; $title = old_map2a($_); }
+        elsif (/=== TRCK/) { s/===.*: //; $track = old_map2a($_); }
+        elsif (/=== TALB/) { s/===.*: //; $album = old_map2a($_); }
+        elsif (/=== TPE1/) { s/===.*: //; $performer = old_map2a($_); }
     }
 
     $track =~ s/\/.*//;
