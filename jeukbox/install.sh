@@ -26,4 +26,6 @@ ssh root@webservers cpan Plack
 ssh root@webservers cpan JSON
 ssh root@webservers cpan File::Slurp
 ssh root@webservers cpan DBD::SQLite
+ssh root@webservers cpan Encode::Detect
+
 
