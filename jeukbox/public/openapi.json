@@ -1,0 +1,469 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Jeukbox API",
+    "version": "1.0.0",
+    "description": "Jeukbox API for managing playlists and music metadata"
+  },
+  "paths": {
+    "/api/artists":{
+      "get": {
+        "summary": "Get list of all known artists",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all artists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artists": { "type": "string" }
+                    }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": [{"artist":"10cc"},{"artist":"2 Unlimited"},{"artist":"3 Days Grace"},{"artist":"3 Doors Down"}]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/artistfromalbum":{
+      "get": {
+        "summary": "Get the name of the artist from the album name",
+        "parameters": [
+          {
+            "name": "album",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "album to lookup"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Name of the artists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artist": { "type": "string" }
+                    }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": [{"artist":"Mazzy Star"}]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/albums":{
+      "get": {
+        "summary": "Get list of all known albums",
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "List only from this artist (if present)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of albums",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "album": { "type": "string" }
+                    }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": [{"album":"Among My Swan"},{"album":"Seasons of Your Day"},{"album":"She Hangs Brightly"},{"album":"So Tonight That I Might See"}]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/artistsfromsong":{
+      "get": {
+        "summary": "Get the artist from the title of the song",
+        "parameters": [
+          {
+            "name": "song",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the song to look up"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Info about the song",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artist": { "type": "string" }
+                    }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": [{"artist":"Killdozer"},{"artist":"Prince"}]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/titles":{
+      "get": {
+        "summary": "Get titles of all songs",
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the artist"
+          },
+          {
+            "name": "album",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the album"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of song titles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": { "type": "string" }
+                    }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": [{"title":"Disappear"},{"title":"Take Everything"},{"title":"Still Cold"},{"title":"All Your Sisters"}]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/file":{
+      "get": {
+        "summary": "Get the name of the file that contains the mp3",
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the artist"
+          },
+          {
+            "name": "album",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the album"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the song to look up"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filename",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "sample": {
+                    "value": "/links/cdtracks/prince/1999.mp3"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/album":{
+      "get": {
+        "summary": "Get song info by title",
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the artist"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the song"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of albums",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "album": { "type": "string" }
+                    }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value":[{"album":"1999"},{"album":"Twelve Point Buck"},{"album":"various Prince"}]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/play":{
+      "get": {
+        "summary": "Get the MP3 file",
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the artist"
+          },
+          {
+            "name": "album",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the album"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the song"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An MP3 audio file",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/txt":{
+      "get": {
+        "summary": "Get lyrics to a song",
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the artist"
+          },
+          {
+            "name": "album",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the album"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the song"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lyrics if available",
+            "content": {
+              "text/plain":{
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "sample": {
+                    "value": "One of these days, I'm gonna cut you into little pieces"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/playlists":{
+      "get": {
+        "summary": "Get predifined playlists",
+        "responses": {
+          "200": {
+            "description": "list of playlists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": ["verzamel-frans","Beatles"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/playcontent":{
+      "get": {
+        "summary": "Get songs that are on a playlist",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the playlist"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of items on the playlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "album": { "type": "string" },
+                      "title": { "type": "string" },
+                      "artist": { "type": "string" }
+                    }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": [{"album":"various Barbara","title":"L'aigle noir","artist":"Barbara"},{"album":"various Bourvil","title":"Salade De Fruits","artist":"Bourvil"},{"artist":"C Jerome","title":"C'est Moi","album":"Top 40 Jaarlijsten - 1974"}]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
