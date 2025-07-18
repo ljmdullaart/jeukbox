@@ -7,7 +7,7 @@
 					<strong>Selected Artist:</strong>
 					<span id="artist-name">None</span>
 				</div>
-				<button id="clear-artist">Clear Artist</button>
+				<button style="width:200px;font-size: 1em;" id="clear-artist">Clear Artist</button>
 				<input type="text" id="artist-filter" placeholder="Search artists..." style="width: 99%; margin-bottom: 0.5em;">
 				<br>
 				<select id="artist-select" size="10" style="font-size:0.9em;"></select>
@@ -18,8 +18,8 @@
 					<strong>Selected Album:</strong>
 					<span id="album-name">None</span>
 				</div>
-				<button id="clear-album">Clear Album</button>
-				<button id="play-album">Play Album</button>
+				<button style="font-size: 1em;width:200px;" id="clear-album">Clear Album</button>
+				<button style="font-size: 1em;width:200px;" id="play-album">Play Album</button>
 				<input type="text" id="album-filter" placeholder="Search albums..." style="width: 99%; margin-bottom: 0.5em;">
 				<br>
 				<select id="album-select" size="10" style="font-size:0.9em;"></select>
@@ -62,11 +62,11 @@
 			<td>
 	
 				<select id="title-select" size="10" style="font-size:0.9em;"></select>
-				<button id="clear-title">Clear Title</button>
+				<button style="font-size: 1em;width:200px;" id="clear-title">Clear Title</button>
 			</td>
 			<td>
 				<select id="playlist-list" size="5" style="font-size:0.9em;"></select>
-      				<button id="no-id"> </button>
+      				<button style="font-size: 1em;width:200px;" id="no-id"> </button>
 			</td>
 		</tr>
 		<tr>
@@ -74,11 +74,12 @@
 				<div class="trans">
 					<strong>Playlist:</strong>
 				</div>
-      				<button id="clear-playlist">Clear List</button>
-				<button id="next-track">Next</button>
+      				<button style="font-size: 1em;width:200px;" id="clear-playlist">Clear List</button>
+				<button style="font-size: 1em;width:200px;" id="next-track">Next</button>
+				<button style="font-size: 1em;width:200px;" id="shuffle-playlist">Shuffle Playlist</button>
 				<br>
 				<select id="playlist-select" size="10" style="font-size:0.9em;"></select>
-				<button id="save-playlist">Save Playlist</button>
+				<button style="font-size: 1em;width:200px;" id="save-playlist">Save Playlist</button>
 			</td>
 			<td style="text-align: center;">
 				<br>
