@@ -283,21 +283,6 @@ if ((!artist || artist === 'Unknown Artist') && album) {
     }
   }
 
-//  async function loadArtists() {
-//    try {
-//      const response = await fetch('/api/artists');
-//      const data = await response.json();
-//      artistSelect.innerHTML = '';
-//      data.forEach(entry => {
-//        const option = document.createElement('option');
-//        option.value = entry.artist;
-//        option.textContent = entry.artist;
-//        artistSelect.appendChild(option);
-//      });
-//    } catch (err) {
-//      // handle error silently
-//    }
-//  }
 async function loadArtists() {
   try {
     const response = await fetch('/api/artists');
@@ -335,24 +320,6 @@ function renderAlbumList(filter) {
   });
 }
 
-
-
-  //async function loadAlbums(artist = '') {
-    //try {
-      //const response = await fetch(`/api/albums?artist=${encodeURIComponent(artist)}`);
-      //const data = await response.json();
-      //albumSelect.innerHTML = '';
-      //data.forEach(entry => {
-        //const option = document.createElement('option');
-        //option.value = entry.album;
-        //option.textContent = entry.album;
-        //albumSelect.appendChild(option);
-      //});
-    //} catch (err) {
-      //// handle error silently
-    //}
-  //}
-
 async function loadAlbums(artist = '') {
   try {
     const response = await fetch(`/api/albums?artist=${encodeURIComponent(artist)}`);
@@ -361,23 +328,6 @@ async function loadAlbums(artist = '') {
     renderAlbumList('');
   } catch (err) {}
 }
-
-
-  //async function loadTitles(artist = '', album = '') {
-    //try {
-      //const response = await fetch(`/api/titles?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`);
-      //const data = await response.json();
-      //titleSelect.innerHTML = '';
-      //data.forEach(entry => {
-        //const option = document.createElement('option');
-        //option.value = entry.title;
-        //option.textContent = entry.title;
-        //titleSelect.appendChild(option);
-      //});
-    //} catch (err) {
-      //// handle error silently
-    //}
-  //}
 
 async function loadTitles(artist = '', album = '') {
   try {
@@ -404,10 +354,6 @@ function renderTitleList(filter) {
   });
     titleSelect.selectedIndex = -1;
 
-  // Optional: auto-select the first match
-//  if (filtered.length > 0) {
-    //titleSelect.selectedIndex = 0;
-  //}
 }
 
 const titleFilter = document.getElementById('title-filter');
