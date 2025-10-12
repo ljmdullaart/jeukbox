@@ -36,9 +36,10 @@ document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   const ctrl = event.ctrlKey;
   const alt = event.altKey;
+  const shift = event.shiftKey;
 
   // Play next track: N
-  if (key === 'n') {
+  if (key === 'n' && alt) {
     nextTrackButton.click();
   }
 
@@ -53,10 +54,37 @@ document.addEventListener('keydown', (event) => {
     savePlaylistButton.click();
   }
 
-  // Focus artist search: A
-  if (key === 'a' && alt) {
-    artistFilter?.focus();
+  if (key === 'a' && alt ) {
+    const selectElement = document.getElementById('artist-select');
+    if (selectElement) {
+      selectElement.focus();
+    }
   }
+  if (key === 'b' && alt ) {
+    const selectElement = document.getElementById('album-select');
+    if (selectElement) {
+      selectElement.focus();
+    }
+  }
+  if (key === 'c' && alt ) {
+    const selectElement = document.getElementById('title-select');
+    if (selectElement) {
+      selectElement.focus();
+    }
+  }
+  if (key === 'd' && alt && shift) {
+    const selectElement = document.getElementById('playlist-list');
+    if (selectElement) {
+      selectElement.focus();
+    }
+  }
+  if (key === 'e' && alt && shift) {
+    const selectElement = document.getElementById('lyrics-box');
+    if (selectElement) {
+      selectElement.focus();
+    }
+  }
+
 
   // Focus album search: L (for "album lister")
   if (key === 'l' && alt) {
@@ -144,7 +172,9 @@ artistFilter.addEventListener('input', () => {
     loadTitles(window.selectedArtist, '');
   });
 
-  titleSelect.addEventListener('change', async () => {
+  titleSelect.addEventListener('click', async () => { await handleTitleSelect(); } ) ;
+  titleSelect.addEventListener('keydown', async (event) => { if (event.key === 'Enter') {await handleTitleSelect();}}) ;
+  async function handleTitleSelect(){
     const selected = titleSelect.value || null;
     window.selectedTitle = selected;
     titleNameDisplay.textContent = selected || 'None';
@@ -185,7 +215,7 @@ if ((!artist || artist === 'Unknown Artist') && album) {
       playlistSelect.appendChild(option);
       playNextInPlaylist();
     }
-  });
+  };
 
   clearTitleButton.addEventListener('click', () => {
     titleSelect.selectedIndex = -1;
@@ -364,7 +394,9 @@ titleFilter.addEventListener('input', () => {
 });
 
 
-playlistList.addEventListener('change', async () => {
+  playlistList.addEventListener('click', async () => { await handlePlaylistList(); } ) ;
+  playlistList.addEventListener('keydown', async (event) => { if (event.key === 'Enter') {await handlePlaylistList();}}) ;
+  async function handlePlaylistList(){
   const selected = playlistList.value;
   if (!selected) return;
 
@@ -386,7 +418,7 @@ playlistList.addEventListener('change', async () => {
   } catch (err) {
     // Handle silently
   }
-});
+};
 
 savePlaylistButton.addEventListener('click', () => {
   if (playlistSelect.options.length === 0) return;
@@ -473,6 +505,23 @@ shuffleButton.addEventListener('click', () => {
   playlistSelect.innerHTML = '';
   playlistSelect.appendChild(nowPlaying); // keep current first
   rest.forEach(el => playlistSelect.appendChild(el));
+});
+document.addEventListener('keydown', function(event) {
+  // Ignore keypresses inside input or textarea fields
+  const tag = event.target.tagName.toLowerCase();
+  if (tag === 'input' || tag === 'textarea') return;
+
+  const audio = document.getElementById('audio-player');
+
+  // Use spacebar to toggle play/pause
+  if (event.code === 'Space') {
+    event.preventDefault(); // Prevent page scroll
+    if (audio.paused) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  }
 });
 
 
