@@ -25,7 +25,7 @@
 				<select id="album-select" size="10" style="font-size:0.9em;"></select>
 			</td>
 			<td rowspan=4 tyle="width:30% style="width: 100%; table-layout: fixed;">
-				<div id="lyrics-box" style="
+				<div id="lyrics-box"  tabindex="0" contenteditable="true" style="
   					width: 100%;
   					max-height: 700px;
   					height: 700px;
