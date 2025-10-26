@@ -50,7 +50,7 @@ document.addEventListener('keydown', (event) => {
 
   // Save playlist: S
   if (key === 's' && ctrl) {
-    event.preventDefault(); // prevent browser's Save Page dialog
+   
     savePlaylistButton.click();
   }
 
@@ -82,6 +82,12 @@ document.addEventListener('keydown', (event) => {
     const selectElement = document.getElementById('lyrics-box');
     if (selectElement) {
       selectElement.focus();
+    }
+  }
+  if (key === 'q' && alt && shift) {
+    const selectElement = document.getElementById('play-album');
+    if (selectElement) {
+      selectElement.click();
     }
   }
 
